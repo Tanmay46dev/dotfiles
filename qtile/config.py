@@ -198,11 +198,6 @@ screens = [
                     foreground=GRUVBOX["fg"],
                     background=GRUVBOX["bg"]
                 ),
-                # widget.Sep(
-                #     foreground = GRUVBOX["green"],
-                #     background = GRUVBOX["bg"],
-                #     linewidth = 1
-                #     ),
                 # widget.Net(
                 #     foreground = GRUVBOX["red"],
                 #     background = GRUVBOX["bg"],
@@ -217,12 +212,6 @@ screens = [
                 #             ),
                 #         ],
                 # ),
-                # widget.Sep(
-                #     linewidth = 1,
-                #     padding = 5,
-                #     foreground = GRUVBOX["green"],
-                #     background = GRUVBOX["bg"]
-                #     ),
                 widget.CPU(
                     foreground=GRUVBOX["bg"],
                     background=GRUVBOX["purple"],
@@ -237,11 +226,6 @@ screens = [
                     format=" {load_percent}%",
                     # margin=200
                 ),
-                # widget.Sep(
-                #     linewidth=1,
-                #     foreground="4c566a",
-                #     background=GRUVBOX["bg"]
-                # ),
                 widget.Spacer(
                     length=5
                 ),
@@ -281,11 +265,27 @@ screens = [
                 widget.Battery(
                     foreground=GRUVBOX["bg"],
                     background=GRUVBOX["green"],
-                    format="󰁹 {percent:2.0%}"
+                    format="{char} {percent:2.0%}",
+                    low_background=GRUVBOX["red"],
+                    notify_below=10,
+                    discharge_char="󱟤",
+                    empty_char="󰂎",
+                    charge_char="󰂄",
+                    full_char="󰁹"
                 ),
                 widget.Spacer(
                                     length=5
                                 ),
+                widget.Volume(
+                    foreground=GRUVBOX["bg"],
+                    background=GRUVBOX["orange"],
+                    emoji=True,
+                    emoji_list=["󰖁", "󰕿", "󰖀", "󰕾"]
+                ),
+                widget.Spacer(
+                    length=5
+                ),
+
                 widget.Clock(
                     foreground=GRUVBOX["bg"],
                     background=GRUVBOX["blue"],
