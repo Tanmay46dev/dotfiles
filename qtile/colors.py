@@ -11,3 +11,22 @@ GRUVBOX = {
     "blue": "#68948a",
     "purple": "#ab6c7d",
 }
+
+EVERFOREST = {
+    "bg": "#232A2E",
+    "bg0": "#2D353B",
+    "bg1": "#343F44",
+    "bg2": "#3D484D",
+    "bg3": "#475258",
+    "bg4": "#4F585E",
+    "fg": "#D3C6AA",
+    "gray": "#9DA9A0",
+    "dark-gray-0": "#7A8478",
+	"red": "#E67E80",
+    "orange": "#E69875",
+    "yellow": "#DBBC7F",
+    "green": "#A7C080",
+    "aqua": "#83C092",
+    "blue": "#7FBBB3",
+    "purple": "#D699B6",
+}

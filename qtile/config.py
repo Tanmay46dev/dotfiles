@@ -24,20 +24,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from libqtile import bar, layout, widget
+from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
 # Custom imports
-from colors import GRUVBOX
+from colors import EVERFOREST
 # from unicodes import *
 from battery import get_battery_icon
 from qtile_extras.widget.decorations import BorderDecoration
 from qtile_extras.widget.decorations import RectDecoration
+import os
+import subprocess
 
 mod = "mod4"
 terminal = guess_terminal()
+
+# Custom methods
+@hook.subscribe.startup_once
+def autostart():
+    home = os.path.expanduser('~')
+    subprocess.call([home + '/.config/qtile/autostart.sh'])
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -139,9 +147,9 @@ for i in groups:
 layouts = [
     layout.Columns(
         # border_focus_stack=["#d75f5f", "#8f3d3d"],
-        border_normal=GRUVBOX["aqua"],
-        border_focus=GRUVBOX["orange"],
-        border_width=2,
+        border_normal=EVERFOREST["dark-gray-0"],
+        border_focus=EVERFOREST["red"],
+        border_width=3,
         border_on_single=True,
         margin=10
     ),
@@ -175,32 +183,33 @@ screens = [
                     # padding_x = 3,
                     borderwidth=0,
                     disable_drag=True,
-                    active=GRUVBOX["orange"],
-                    inactive=GRUVBOX["dark-gray-0"],
+                    # fontsize=24,
+                    active=EVERFOREST["orange"],
+                    inactive=EVERFOREST["dark-gray-0"],
                     rounded=False,
                     highlight_method="block",
-                    this_current_screen_border=GRUVBOX["green"],
-                    # foreground = GRUVBOX["orange"],
-                    background=GRUVBOX["bg"],
-                    block_highlight_text_color=GRUVBOX["bg"]
+                    this_current_screen_border=EVERFOREST["green"],
+                    # foreground = EVERFOREST["orange"],
+                    # background=EVERFOREST["bg3"],
+                    block_highlight_text_color=EVERFOREST["bg3"]
                 ),
                 widget.Sep(
                     linewidth=1,
                     # padding = 5,
-                    foreground=GRUVBOX["green"],
-                    background=GRUVBOX["bg"]
+                    foreground=EVERFOREST["green"],
+                    # background=EVERFOREST["bg3"]
                 ),
                 widget.Prompt(
-                    background=GRUVBOX["bg"],
-                    foreground=GRUVBOX["fg"]
+                    background=EVERFOREST["bg3"],
+                    foreground=EVERFOREST["fg"]
                 ),
                 widget.WindowName(
-                    foreground=GRUVBOX["fg"],
-                    background=GRUVBOX["bg"]
+                    foreground=EVERFOREST["fg"],
+                    # background=EVERFOREST["bg3"]
                 ),
                 # widget.Net(
-                #     foreground = GRUVBOX["red"],
-                #     background = GRUVBOX["bg"],
+                #     foreground = EVERFOREST["red"],
+                #     background = EVERFOREST["bg3"],
                 #     format = '{down} ↓↑ {up}',
                 #     interface = 'enp62s0',
                 #     decorations = [
@@ -213,13 +222,13 @@ screens = [
                 #         ],
                 # ),
                 widget.CPU(
-                    foreground=GRUVBOX["bg"],
-                    background=GRUVBOX["purple"],
+                    # background=EVERFOREST["bg3"],
+                    foreground=EVERFOREST["purple"],
                     # decorations = [
                     #     RectDecoration (
-                    #         colour = "#ebcb8b",
-                    #         padding_y = 3,
-                    #         radius = 2,
+                    #         # colour = "#212121",
+                    #         padding_y = 10,
+                    #         radius = 50,
                     #         filled = True
                     #     ),
                     # ],
@@ -231,8 +240,8 @@ screens = [
                 ),
                 widget.Memory(
                     measure_mem='G',
-                    foreground=GRUVBOX["bg"],
-                    background=GRUVBOX["yellow"],
+                    foreground=EVERFOREST["yellow"],
+                    # background=EVERFOREST["yellow"],
                     format="{MemUsed: .2f}{mm}/{MemTotal: .2f}{mm}",
                     # decorations = [
                     #     RectDecoration (
@@ -246,9 +255,33 @@ screens = [
                 widget.Spacer(
                                     length=5
                                 ),
+                widget.Battery(
+                    foreground=EVERFOREST["green"],
+                    # background=EVERFOREST["green"],
+                    format="{char} {percent:2.0%}",
+                    low_background=EVERFOREST["bg"],
+                    low_foreground=EVERFOREST["red"],
+                    notify_below=10,
+                    discharge_char="󱟤",
+                    empty_char="󰂎",
+                    charge_char="󰂄",
+                    full_char="󰁹"
+                ),
+                widget.Spacer(
+                                    length=5
+                                ),
+                widget.Volume(
+                    foreground=EVERFOREST["aqua"],
+                    # background=EVERFOREST["orange"],
+                    # emoji=True,
+                    # emoji_list=[ "󰖁 ", " 󰕿 ", " 󰖀 ", " 󰕾 "]
+                ),
+                widget.Spacer(
+                    length=5
+                ),
                 widget.Clock(
-                    foreground=GRUVBOX["bg"],
-                    background=GRUVBOX["red"],
+                    foreground=EVERFOREST["red"],
+                    # background=EVERFOREST["red"],
                     format=" %d/%m/%Y",
                     # decorations = [
                     #     RectDecoration (
@@ -260,35 +293,11 @@ screens = [
                     # ],
                 ),
                 widget.Spacer(
-                                    length=5
-                                ),
-                widget.Battery(
-                    foreground=GRUVBOX["bg"],
-                    background=GRUVBOX["green"],
-                    format="{char} {percent:2.0%}",
-                    low_background=GRUVBOX["red"],
-                    notify_below=10,
-                    discharge_char="󱟤",
-                    empty_char="󰂎",
-                    charge_char="󰂄",
-                    full_char="󰁹"
-                ),
-                widget.Spacer(
-                                    length=5
-                                ),
-                widget.Volume(
-                    foreground=GRUVBOX["bg"],
-                    background=GRUVBOX["orange"],
-                    emoji=True,
-                    emoji_list=["󰖁", "󰕿", "󰖀", "󰕾"]
-                ),
-                widget.Spacer(
                     length=5
                 ),
-
                 widget.Clock(
-                    foreground=GRUVBOX["bg"],
-                    background=GRUVBOX["blue"],
+                    foreground=EVERFOREST["blue"],
+                    # background=EVERFOREST["blue"],
                     format=" %I:%M %p",
                     # decorations = [
                     #     RectDecoration (
@@ -305,12 +314,12 @@ screens = [
             ],
             size=30,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-            background=GRUVBOX["bg"],
+            border_color=["ff00ff", "000000", "ff00ff", "000000"],  # Borders are magenta
+            background=EVERFOREST["bg1"],
             margin=10,
             opacity=0.9
         ),
-        wallpaper="~/Pictures/wallpapers/gruvbox/solar-system-minimal.png",
+        wallpaper="~/Pictures/wallpapers/everforest/undefined - Imgur.png",
         wallpaper_mode="fill"
         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
         # By default we handle these events delayed to already improve performance, however your system might still be struggling
@@ -342,7 +351,11 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-    ]
+    ],
+    border_normal=EVERFOREST["dark-gray-0"],
+    border_focus=EVERFOREST["purple"],
+    border_width=3,
+    border_on_single=True,
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
