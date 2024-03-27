@@ -24,7 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from libqtile import bar, layout, widget, hook
+from libqtile import bar, layout, widget, hook, qtile
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
@@ -37,6 +37,7 @@ from qtile_extras.widget.decorations import BorderDecoration
 from qtile_extras.widget.decorations import RectDecoration
 import os
 import subprocess
+# import qtile
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -169,11 +170,13 @@ layouts = [
 
 widget_defaults = dict(
     font="Jetbrainsmono nerd font",
-    fontsize=21,
+    fontsize=21, # Icon size
     padding=5,
     foreground=EVERFOREST["fg"],
     
 )
+
+DEFAULT_TEXT_FONT_SIZE = 19
 extension_defaults = widget_defaults.copy()
 
 screens = [
@@ -181,71 +184,36 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
-                    # padding_y = 2,
-                    # padding_x = 3,
                     borderwidth=0,
-                    fontsize=19,
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
                     padding=8,
                     disable_drag=True,
                     hide_unused=True,
-                    # fontsize=24,
                     active=EVERFOREST["orange"],
-                    # inactive=EVERFOREST["dark-gray-0"],
                     rounded=False,
                     highlight_method="line",
                     highlight_color=EVERFOREST["green"],
                     this_current_screen_border=EVERFOREST["green"],
-                    # foreground = EVERFOREST["orange"],
-                    # background=EVERFOREST["bg3"],
                     block_highlight_text_color=EVERFOREST["bg3"]
                 ),
                 widget.Sep(
                     linewidth=1,
-                    # padding = 5,
                     foreground=EVERFOREST["green"],
-                    # background=EVERFOREST["bg3"]
                 ),
                 widget.Prompt(
                     background=EVERFOREST["bg3"],
-                    foreground=EVERFOREST["fg"],
-                    fontsize=19,
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
                 ),
                 widget.WindowName(
-                    fontsize=19,
-                    foreground=EVERFOREST["fg"],
-                    # background=EVERFOREST["bg3"]
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
                 ),
-                # widget.Net(
-                #     foreground = EVERFOREST["red"],
-                #     background = EVERFOREST["bg3"],
-                #     format = '{down} ↓↑ {up}',
-                #     interface = 'enp62s0',
-                #     decorations = [
-                #         RectDecoration (
-                #             colour = "#212121",
-                #             padding_y = 3,
-                #             radius = 2,
-                #             filled = True
-                #             ),
-                #         ],
-                # ),
                 widget.TextBox(
                     text=" ",
                     foreground=EVERFOREST["purple"],
                 ),
                 widget.CPU(
-                    # background=EVERFOREST["bg3"],
-                    # decorations = [
-                    #     RectDecoration (
-                    #         # colour = "#212121",
-                    #         padding_y = 10,
-                    #         radius = 50,
-                    #         filled = True
-                    #     ),
-                    # ],
                     format="{load_percent}%",
-                    fontsize=19,
-                    # margin=200
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
                 ),
                 widget.Spacer(
                     length=5
@@ -255,24 +223,15 @@ screens = [
                     foreground=EVERFOREST["yellow"],
                 ),
                 widget.Memory(
-                    fontsize=19,
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
                     measure_mem='G',
-                    # background=EVERFOREST["yellow"],
                     format="{MemUsed:.2f}{mm}/{MemTotal: .2f}{mm}",
-                    # decorations = [
-                    #     RectDecoration (
-                    #         colour = "#88c0d0",
-                    #         padding_y = 3,
-                    #         radius = 2,
-                    #         filled = True
-                    #     ),
-                    # ],
                 ),
                 widget.Spacer(
-                                    length=5
-                                ),
+                    length=5
+                ),
                 widget.Battery(
-                    fontsize=19,
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
                     foreground=EVERFOREST["green"],
                     # background=EVERFOREST["green"],
                     format="{char} {percent:2.0%}",
@@ -285,17 +244,31 @@ screens = [
                     full_char="󰁹"
                 ),
                 widget.Spacer(
-                                    length=5
-                                ),
+                    length=5
+                ),
                 widget.TextBox(
                     text="󰕾",
                     foreground=EVERFOREST["aqua"],
                 ),
                 widget.Volume(
-                    # background=EVERFOREST["orange"],
-                    # emoji=True,
-                    # emoji_list=[ "󰖁 ", " 󰕿 ", " 󰖀 ", " 󰕾 "]
-                    fontsize=19,
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
+                ),
+                widget.Spacer(
+                    length=5
+                ),
+                widget.TextBox(
+                    text="󰖩",
+                    foreground=EVERFOREST["red"],
+                    # fontsize=19,
+                ),
+                widget.GenPollCommand(
+                    cmd="nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d ':' -f 2",
+                    shell=True,
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
+                    mouse_callbacks={
+                        'Button1': lambda: qtile.cmd_spawn("rofi-wifi-menu")
+                    }
+                    # cmd="whoami"
                 ),
                 widget.Spacer(
                     length=5
@@ -305,17 +278,8 @@ screens = [
                     foreground=EVERFOREST["aqua"],
                 ),
                 widget.Clock(
-                    # background=EVERFOREST["red"],
-                    fontsize=19,
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
                     format="%d/%m/%Y",
-                    # decorations = [
-                    #     RectDecoration (
-                    #         colour = "#81a1c1",
-                    #         padding_y = 3,
-                    #         radius = 2,
-                    #         filled = True
-                    #     ),
-                    # ],
                 ),
                 widget.Spacer(
                     length=5
@@ -325,17 +289,18 @@ screens = [
                     foreground=EVERFOREST["blue"],
                 ),
                 widget.Clock(
-                    # background=EVERFOREST["blue"],
-                    fontsize=19,
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
                     format="%I:%M %p",
-                    # decorations = [
-                    #     RectDecoration (
-                    #         colour = "#81a1c1",
-                    #         padding_y = 3,
-                    #         radius = 2,
-                    #         filled = True
-                    #     ),
-                    # ],
+                ),
+                widget.Spacer(
+                    length=5
+                ),
+                widget.TextBox(
+                    text=" ",
+                    foreground=EVERFOREST["red"],
+                    mouse_callbacks={
+                        'Button1': lambda: qtile.cmd_spawn("powermenu")
+                    }
                 ),
                 # # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # # widget.StatusNotifier(),
