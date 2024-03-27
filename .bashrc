@@ -23,8 +23,11 @@ if [ -d ~/.bashrc.d ]; then
     done
 fi
 
+# Custom aliases
 alias neofetch="neofetch --config ~/.config/neofetch/dotfetch.conf"
 alias q="cd ~/.config/qtile"
+alias wall="cd ~/Pictures/wallpapers"
+alias wifimenu="rofi-wifi-menu"
 
 # Startup scripts
 eval "$(starship init bash)"
