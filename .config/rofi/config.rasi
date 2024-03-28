@@ -13,7 +13,7 @@ configuration {
     }
 }
 
-@import "~/.config/rofi/everforest.rasi"
+@import "~/.config/rofi/catppuccin-mocha.rasi"
 
 window {
     background-color: @background;

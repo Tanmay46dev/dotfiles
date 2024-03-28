@@ -31,3 +31,24 @@ EVERFOREST = {
     "blue": "#7FBBB3",
     "purple": "#D699B6",
 }
+
+CATPPUCCIN = {
+    "bg": "#11111b",
+    "bg0": "#181825",
+    "bg1": "#1e1e2e",
+    "bg2": "#313244",
+    "bg3": "#45475a",
+    "bg4": "#585b70",
+    "fg": "#cdd6f4",
+    "gray": "#9399b2",
+    "dark-gray-0": "#6c7086",
+	"red": "#f38ba8",
+    "pink": "#f5c2e7",
+    "orange": "#fab387",
+    "yellow": "#df8e1d",
+    "green": "#a6e3a1",
+    "teal": "#94e2d5",
+    "blue": "#89b4fa",
+    "purple": "#cba6f7",
+}
+

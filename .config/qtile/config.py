@@ -30,7 +30,7 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
 # Custom imports
-from colors import EVERFOREST
+from colors import CATPPUCCIN
 # from unicodes import *
 from battery import get_battery_icon
 from qtile_extras.widget.decorations import BorderDecoration
@@ -145,14 +145,17 @@ for i in groups:
         ]
     )
 
+layout_theme = {
+    "border_normal": CATPPUCCIN["dark-gray-0"],
+    "border_focus": CATPPUCCIN["red"],
+    "border_width": 3,
+    "border_on_single": True,
+    "margin": 8
+}
 layouts = [
     layout.Columns(
         # border_focus_stack=["#d75f5f", "#8f3d3d"],
-        border_normal=EVERFOREST["dark-gray-0"],
-        border_focus=EVERFOREST["red"],
-        border_width=3,
-        border_on_single=True,
-        margin=8
+        **layout_theme
     ),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
@@ -169,47 +172,58 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Jetbrainsmono nerd font",
+    font="Jetbrainsmono nerd font bold",
     fontsize=21, # Icon size
     padding=5,
-    foreground=EVERFOREST["fg"],
+    foreground=CATPPUCCIN["fg"],
+    # margin=
     
 )
 
-DEFAULT_TEXT_FONT_SIZE = 19
+DEFAULT_TEXT_FONT_SIZE = 17
 extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.GroupBox(
-                    borderwidth=0,
+                widget.Spacer(
+                    length=5
+                ),
+                widget.CurrentLayoutIcon(
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
-                    padding=8,
+                    scale=0.6,
+                ),
+                widget.GroupBox(
+                    font="Jetbrainsmono nerd font",
+                    # borderwidth=0,
+                    fontsize=19,
+                    padding_x=15,
+                    padding_y=10,
                     disable_drag=True,
                     hide_unused=True,
-                    active=EVERFOREST["orange"],
+                    active=CATPPUCCIN["orange"],
                     rounded=False,
                     highlight_method="line",
-                    highlight_color=EVERFOREST["green"],
-                    this_current_screen_border=EVERFOREST["green"],
-                    block_highlight_text_color=EVERFOREST["bg3"]
+                    highlight_color=CATPPUCCIN["green"],
+                    this_current_screen_border=CATPPUCCIN["green"],
+                    block_highlight_text_color=CATPPUCCIN["bg3"]
                 ),
                 widget.Sep(
                     linewidth=1,
-                    foreground=EVERFOREST["green"],
+                    foreground=CATPPUCCIN["green"],
                 ),
                 widget.Prompt(
-                    background=EVERFOREST["bg3"],
+                    background=CATPPUCCIN["bg3"],
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                 ),
                 widget.WindowName(
+                    font="Jetbrainsmono nerd font",
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                 ),
                 widget.TextBox(
                     text=" ",
-                    foreground=EVERFOREST["purple"],
+                    foreground=CATPPUCCIN["purple"],
                 ),
                 widget.CPU(
                     format="{load_percent}%",
@@ -220,23 +234,26 @@ screens = [
                 ),
                 widget.TextBox(
                     text=" ",
-                    foreground=EVERFOREST["yellow"],
+                    foreground=CATPPUCCIN["yellow"],
                 ),
                 widget.Memory(
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                     measure_mem='G',
-                    format="{MemUsed:.2f}{mm}/{MemTotal: .2f}{mm}",
+                    format="{MemUsed:.2f}{mm} / {MemTotal:.2f}{mm}",
+                    mouse_callbacks={
+                        'Button1': lambda: qtile.cmd_spawn("alacritty -e htop")
+                    }
                 ),
                 widget.Spacer(
                     length=5
                 ),
                 widget.Battery(
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
-                    foreground=EVERFOREST["green"],
+                    foreground=CATPPUCCIN["green"],
                     # background=EVERFOREST["green"],
                     format="{char} {percent:2.0%}",
-                    low_background=EVERFOREST["bg"],
-                    low_foreground=EVERFOREST["red"],
+                    low_background=CATPPUCCIN["bg"],
+                    low_foreground=CATPPUCCIN["red"],
                     notify_below=10,
                     discharge_char="󱟤",
                     empty_char="󰂎",
@@ -248,7 +265,7 @@ screens = [
                 ),
                 widget.TextBox(
                     text="󰕾",
-                    foreground=EVERFOREST["aqua"],
+                    foreground=CATPPUCCIN["teal"],
                 ),
                 widget.Volume(
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
@@ -258,7 +275,10 @@ screens = [
                 ),
                 widget.TextBox(
                     text="󰖩",
-                    foreground=EVERFOREST["red"],
+                    foreground=CATPPUCCIN["red"],
+                    mouse_callbacks={
+                        'Button1': lambda: qtile.cmd_spawn("rofi-wifi-menu")
+                    }
                     # fontsize=19,
                 ),
                 widget.GenPollCommand(
@@ -270,34 +290,37 @@ screens = [
                     }
                     # cmd="whoami"
                 ),
-                widget.Spacer(
-                    length=5
-                ),
-                widget.TextBox(
-                    text=" ",
-                    foreground=EVERFOREST["aqua"],
-                ),
-                widget.Clock(
-                    fontsize=DEFAULT_TEXT_FONT_SIZE,
-                    format="%d/%m/%Y",
-                ),
+                # widget.Spacer(
+                #     length=5
+                # ),
+                # widget.TextBox(
+                #     text=" ",
+                #     foreground=EVERFOREST["aqua"],
+                # ),
+                # widget.Clock(
+                #     fontsize=DEFAULT_TEXT_FONT_SIZE,
+                #     format="%d/%m/%Y",
+                # ),
                 widget.Spacer(
                     length=5
                 ),
                 widget.TextBox(
                     text=" ",
-                    foreground=EVERFOREST["blue"],
+                    foreground=CATPPUCCIN["blue"],
                 ),
                 widget.Clock(
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                     format="%I:%M %p",
+                    mouse_callbacks={
+                        'Button1': lambda: qtile.cmd_spawn("gnome-calendar")
+                    }
                 ),
                 widget.Spacer(
                     length=5
                 ),
                 widget.TextBox(
                     text=" ",
-                    foreground=EVERFOREST["red"],
+                    foreground=CATPPUCCIN["red"],
                     mouse_callbacks={
                         'Button1': lambda: qtile.cmd_spawn("powermenu")
                     }
@@ -306,15 +329,15 @@ screens = [
                 # # widget.StatusNotifier(),
                 widget.Systray(),
             ],
-            size=30,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            border_color=["ff00ff", "000000", "ff00ff", "000000"],  # Borders are magenta
-            background=EVERFOREST["bg1"]+"00",
+            size=40,
+            # border_width=[0, 2, 0, 2],  # Top right bottom left
+            border_color=[CATPPUCCIN["orange"], CATPPUCCIN["orange"], CATPPUCCIN["orange"], CATPPUCCIN["orange"]],  # Borders are magenta
+            background=CATPPUCCIN["bg"],
             margin=10,
             opacity=0.9
         ),
-        wallpaper="~/Pictures/wallpapers/everforest/undefined - Imgur.png",
-        wallpaper_mode="fill"
+        # wallpaper="~/Pictures/wallpapers/everforest/undefined - Imgur.png",
+        # wallpaper_mode="fill"
         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
         # By default we handle these events delayed to already improve performance, however your system might still be struggling
         # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
@@ -346,8 +369,8 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
     ],
-    border_normal=EVERFOREST["dark-gray-0"],
-    border_focus=EVERFOREST["purple"],
+    border_normal=CATPPUCCIN["dark-gray-0"],
+    border_focus=CATPPUCCIN["purple"],
     border_width=3,
     border_on_single=True,
 )
