@@ -104,6 +104,9 @@ keys = [
 
     # CustomLaunchers
     Key([mod], "p", lazy.spawn("rofi -show drun"), desc="Launch rofi"),
+    Key([mod], "l", lazy.spawn("powermenu"), desc="Launch powermenu"),
+    Key([mod], "w", lazy.spawn("rofi-wifi-menu"), desc="Launch wifimenu"),
+
 
 ]
 
@@ -147,7 +150,7 @@ for i in groups:
 
 layout_theme = {
     "border_normal": CATPPUCCIN["dark-gray-0"],
-    "border_focus": CATPPUCCIN["red"],
+    "border_focus": CATPPUCCIN["purple"],
     "border_width": 3,
     "border_on_single": True,
     "margin": 8
@@ -176,11 +179,10 @@ widget_defaults = dict(
     fontsize=21, # Icon size
     padding=5,
     foreground=CATPPUCCIN["fg"],
-    # margin=
-    
 )
 
 DEFAULT_TEXT_FONT_SIZE = 17
+DEFAULT_SPACER_LENGTH = 15
 extension_defaults = widget_defaults.copy()
 
 screens = [
@@ -192,33 +194,32 @@ screens = [
                 ),
                 widget.CurrentLayoutIcon(
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
-                    scale=0.6,
+                    scale=0.5,
                 ),
                 widget.GroupBox(
                     font="Jetbrainsmono nerd font",
                     # borderwidth=0,
                     fontsize=19,
-                    padding_x=15,
-                    padding_y=10,
+                    padding=10,
                     disable_drag=True,
                     hide_unused=True,
-                    active=CATPPUCCIN["orange"],
+                    active=CATPPUCCIN["pink"], # Active workspaces text color
                     rounded=False,
                     highlight_method="line",
-                    highlight_color=CATPPUCCIN["green"],
-                    this_current_screen_border=CATPPUCCIN["green"],
-                    block_highlight_text_color=CATPPUCCIN["bg3"]
+                    highlight_color=CATPPUCCIN["bg"], # Highlighted block color
+                    this_current_screen_border=CATPPUCCIN["green"], # underLine color
+                    block_highlight_text_color=CATPPUCCIN["green"] # Highlighted text color
                 ),
                 widget.Sep(
                     linewidth=1,
                     foreground=CATPPUCCIN["green"],
                 ),
                 widget.Prompt(
-                    background=CATPPUCCIN["bg3"],
+                    # background=CATPPUCCIN["bg3"],
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                 ),
                 widget.WindowName(
-                    font="Jetbrainsmono nerd font",
+                    # font="Jetbrainsmono nerd font",
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                 ),
                 widget.TextBox(
@@ -245,7 +246,7 @@ screens = [
                     }
                 ),
                 widget.Spacer(
-                    length=5
+                    length=DEFAULT_SPACER_LENGTH
                 ),
                 widget.Battery(
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
@@ -258,10 +259,10 @@ screens = [
                     discharge_char="󱟤",
                     empty_char="󰂎",
                     charge_char="󰂄",
-                    full_char="󰁹"
+                    full_char="󰁹",
                 ),
                 widget.Spacer(
-                    length=5
+                    length=DEFAULT_SPACER_LENGTH
                 ),
                 widget.TextBox(
                     text="󰕾",
@@ -271,7 +272,7 @@ screens = [
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                 ),
                 widget.Spacer(
-                    length=5
+                    length=DEFAULT_SPACER_LENGTH
                 ),
                 widget.TextBox(
                     text="󰖩",
@@ -288,10 +289,9 @@ screens = [
                     mouse_callbacks={
                         'Button1': lambda: qtile.cmd_spawn("rofi-wifi-menu")
                     }
-                    # cmd="whoami"
                 ),
                 # widget.Spacer(
-                #     length=5
+                #     length=DEFAULT_SPACER_LENGTH
                 # ),
                 # widget.TextBox(
                 #     text=" ",
@@ -302,7 +302,7 @@ screens = [
                 #     format="%d/%m/%Y",
                 # ),
                 widget.Spacer(
-                    length=5
+                    length=DEFAULT_SPACER_LENGTH
                 ),
                 widget.TextBox(
                     text=" ",
@@ -316,7 +316,7 @@ screens = [
                     }
                 ),
                 widget.Spacer(
-                    length=5
+                    length=DEFAULT_SPACER_LENGTH
                 ),
                 widget.TextBox(
                     text=" ",
@@ -370,7 +370,7 @@ floating_layout = layout.Floating(
         Match(title="pinentry"),  # GPG key password entry
     ],
     border_normal=CATPPUCCIN["dark-gray-0"],
-    border_focus=CATPPUCCIN["purple"],
+    border_focus=CATPPUCCIN["red"],
     border_width=3,
     border_on_single=True,
 )

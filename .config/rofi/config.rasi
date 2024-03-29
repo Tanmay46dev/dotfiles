@@ -1,6 +1,6 @@
 
 configuration {
-   	font: "Mononoki Nerd font 19";
+   	font: "Jetbrainsmono nerd font 18";
     drun {
         display-name: " ";
     }
@@ -22,7 +22,7 @@ window {
     border-color:     @active;
     padding:          8;
     width: 520px;
-    height: 385px;
+    height: 500px;
 }
 mainbox {
     border:  0;

@@ -2,7 +2,7 @@
     background:     #11111b;
     foreground:     #cdd6f4;
     active:         #cba6f7;
-    selected:       #f38ba8;
+    selected:       #cba6f7;
     selected-text:  #11111b;
 }
 
