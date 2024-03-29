@@ -32,12 +32,12 @@ from libqtile.utils import guess_terminal
 # Custom imports
 from colors import CATPPUCCIN
 # from unicodes import *
-from battery import get_battery_icon
-from qtile_extras.widget.decorations import BorderDecoration
+# from battery import get_battery_icon
+# from qtile_extras.widget.decorations import BorderDecoration
 from qtile_extras.widget.decorations import RectDecoration
+from qtile_extras import widget
 import os
 import subprocess
-# import qtile
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -178,37 +178,41 @@ widget_defaults = dict(
     font="Jetbrainsmono nerd font bold",
     fontsize=21, # Icon size
     padding=5,
-    foreground=CATPPUCCIN["fg"],
+    foreground=CATPPUCCIN["bg"],
 )
 
 DEFAULT_TEXT_FONT_SIZE = 17
 DEFAULT_SPACER_LENGTH = 15
+RECT_DECORATION_RADIUS = 10
 extension_defaults = widget_defaults.copy()
+
+def generate_default_rect_decorations(color) -> list:
+    return [
+        RectDecoration(
+            colour=CATPPUCCIN[color],
+            radius=RECT_DECORATION_RADIUS,
+            filled=True,
+            group=True,
+            padding_y=4
+        )
+    ]
 
 screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.Spacer(
-                    length=5
-                ),
-                widget.CurrentLayoutIcon(
-                    fontsize=DEFAULT_TEXT_FONT_SIZE,
-                    scale=0.5,
-                ),
                 widget.GroupBox(
                     font="Jetbrainsmono nerd font",
-                    # borderwidth=0,
+                    borderwidth=0,
                     fontsize=19,
-                    padding=10,
+                    padding_x=15,
                     disable_drag=True,
-                    hide_unused=True,
+                    # hide_unused=True,
                     active=CATPPUCCIN["pink"], # Active workspaces text color
-                    rounded=False,
-                    highlight_method="line",
-                    highlight_color=CATPPUCCIN["bg"], # Highlighted block color
+                    rounded=True,
+                    highlight_method="block",
                     this_current_screen_border=CATPPUCCIN["green"], # underLine color
-                    block_highlight_text_color=CATPPUCCIN["green"] # Highlighted text color
+                    block_highlight_text_color=CATPPUCCIN["bg"], # Highlighted text color
                 ),
                 widget.Sep(
                     linewidth=1,
@@ -221,37 +225,31 @@ screens = [
                 widget.WindowName(
                     # font="Jetbrainsmono nerd font",
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
-                ),
-                widget.TextBox(
-                    text=" ",
-                    foreground=CATPPUCCIN["purple"],
-                ),
-                widget.CPU(
-                    format="{load_percent}%",
-                    fontsize=DEFAULT_TEXT_FONT_SIZE,
+                    foreground=CATPPUCCIN["fg"],
                 ),
                 widget.Spacer(
                     length=5
                 ),
                 widget.TextBox(
-                    text=" ",
-                    foreground=CATPPUCCIN["yellow"],
+                    text="",
+                    # background=CATPPUCCIN["orange"],
+                    decorations=generate_default_rect_decorations("orange")
                 ),
                 widget.Memory(
+                    # background=CATPPUCCIN["orange"],
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                     measure_mem='G',
                     format="{MemUsed:.2f}{mm} / {MemTotal:.2f}{mm}",
                     mouse_callbacks={
                         'Button1': lambda: qtile.cmd_spawn("alacritty -e htop")
-                    }
+                    },
+                    decorations=generate_default_rect_decorations("orange")
                 ),
                 widget.Spacer(
                     length=DEFAULT_SPACER_LENGTH
                 ),
                 widget.Battery(
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
-                    foreground=CATPPUCCIN["green"],
-                    # background=EVERFOREST["green"],
                     format="{char} {percent:2.0%}",
                     low_background=CATPPUCCIN["bg"],
                     low_foreground=CATPPUCCIN["red"],
@@ -260,70 +258,92 @@ screens = [
                     empty_char="󰂎",
                     charge_char="󰂄",
                     full_char="󰁹",
+                    decorations=generate_default_rect_decorations("green")
                 ),
                 widget.Spacer(
                     length=DEFAULT_SPACER_LENGTH
                 ),
                 widget.TextBox(
                     text="󰕾",
-                    foreground=CATPPUCCIN["teal"],
+                    decorations=generate_default_rect_decorations("red")
                 ),
                 widget.Volume(
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
+                    decorations=generate_default_rect_decorations("red")
                 ),
                 widget.Spacer(
                     length=DEFAULT_SPACER_LENGTH
                 ),
                 widget.TextBox(
-                    text="󰖩",
-                    foreground=CATPPUCCIN["red"],
+                    text="󰤨 ",
+                    decorations=generate_default_rect_decorations("purple"),
                     mouse_callbacks={
                         'Button1': lambda: qtile.cmd_spawn("rofi-wifi-menu")
                     }
                     # fontsize=19,
                 ),
                 widget.GenPollCommand(
+                    decorations=generate_default_rect_decorations("purple"),
                     cmd="nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d ':' -f 2",
                     shell=True,
+                    update_interval=10,
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                     mouse_callbacks={
                         'Button1': lambda: qtile.cmd_spawn("rofi-wifi-menu")
                     }
                 ),
-                # widget.Spacer(
-                #     length=DEFAULT_SPACER_LENGTH
-                # ),
-                # widget.TextBox(
-                #     text=" ",
-                #     foreground=EVERFOREST["aqua"],
-                # ),
-                # widget.Clock(
-                #     fontsize=DEFAULT_TEXT_FONT_SIZE,
-                #     format="%d/%m/%Y",
-                # ),
                 widget.Spacer(
                     length=DEFAULT_SPACER_LENGTH
                 ),
+                widget.Sep(
+                    # length=DEFAULT_SPACER_LENGTH
+                    foreground=CATPPUCCIN["fg"]
+                ),
+                widget.CheckUpdates(
+                    distro="Fedora",
+                    display_format="\ueb9a {updates} available",
+                    no_update_string="\ueaa2 0",
+                    colour_have_updates=CATPPUCCIN["red"],
+                    colour_no_updates=CATPPUCCIN["green"],
+                    update_interval=60,
+                    padding=8,
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
+                    mouse_callbacks={
+                        'Button1': lambda: qtile.cmd_spawn("alacritty -e sudo dnf update")
+                    }
+                ),
+                widget.Sep(
+                    foreground=CATPPUCCIN["fg"]
+                ),
                 widget.TextBox(
-                    text=" ",
+                    text="󰥔",
                     foreground=CATPPUCCIN["blue"],
                 ),
                 widget.Clock(
+                    foreground=CATPPUCCIN["blue"],
+                    # decorations=[
+                    #     RectDecoration(
+                    #         colour=CATPPUCCIN["blue"],
+                    #         radius=RECT_DECORATION_RADIUS,
+                    #         filled=True,
+                    #         group=True,
+                    #     )
+                    # ],
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
-                    format="%I:%M %p",
+                    format="%I:%M %p ",
                     mouse_callbacks={
                         'Button1': lambda: qtile.cmd_spawn("gnome-calendar")
                     }
                 ),
-                widget.Spacer(
-                    length=DEFAULT_SPACER_LENGTH
+                widget.Sep(
+                    foreground=CATPPUCCIN["fg"]
                 ),
-                widget.TextBox(
-                    text=" ",
-                    foreground=CATPPUCCIN["red"],
-                    mouse_callbacks={
-                        'Button1': lambda: qtile.cmd_spawn("powermenu")
-                    }
+                widget.CurrentLayoutIcon(
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
+                    scale=0.5,
+                ),
+                widget.Spacer(
+                    length=5
                 ),
                 # # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # # widget.StatusNotifier(),
@@ -334,7 +354,7 @@ screens = [
             border_color=[CATPPUCCIN["orange"], CATPPUCCIN["orange"], CATPPUCCIN["orange"], CATPPUCCIN["orange"]],  # Borders are magenta
             background=CATPPUCCIN["bg"],
             margin=10,
-            opacity=0.9
+            opacity=1
         ),
         # wallpaper="~/Pictures/wallpapers/everforest/undefined - Imgur.png",
         # wallpaper_mode="fill"
