@@ -104,7 +104,7 @@ keys = [
 
     # CustomLaunchers
     Key([mod], "p", lazy.spawn("rofi -show drun"), desc="Launch rofi"),
-    Key([mod], "l", lazy.spawn("powermenu"), desc="Launch powermenu"),
+    Key([mod, "shift"], "l", lazy.spawn("powermenu"), desc="Launch powermenu"),
     Key([mod], "w", lazy.spawn("rofi-wifi-menu"), desc="Launch wifimenu"),
 
 
@@ -160,18 +160,18 @@ layouts = [
         # border_focus_stack=["#d75f5f", "#8f3d3d"],
         **layout_theme
     ),
-    layout.Max(),
     # Try more layouts by unleashing below layouts.
-    # layout.Stack(num_stacks=2),
-    # layout.Bsp(),
-    # layout.Matrix(),
-    # layout.MonadTall(),
-    # layout.MonadWide(),
-    # layout.RatioTile(),
-    # layout.Tile(),
-    # layout.TreeTab(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
+    layout.Stack(num_stacks=2),
+    layout.Bsp(**layout_theme),
+    layout.Matrix(**layout_theme),
+    layout.MonadTall(**layout_theme),
+    layout.Max(**layout_theme),
+    layout.MonadWide(**layout_theme),
+    layout.RatioTile(**layout_theme),
+    layout.Tile(**layout_theme),
+    layout.TreeTab(**layout_theme),
+    layout.VerticalTile(**layout_theme),
+    layout.Zoomy(**layout_theme),
 ]
 
 widget_defaults = dict(
@@ -219,7 +219,7 @@ screens = [
                     foreground=CATPPUCCIN["green"],
                 ),
                 widget.Prompt(
-                    # background=CATPPUCCIN["bg3"],
+                    foreground=CATPPUCCIN["fg"],
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                 ),
                 widget.WindowName(
@@ -241,7 +241,7 @@ screens = [
                     measure_mem='G',
                     format="{MemUsed:.2f}{mm} / {MemTotal:.2f}{mm}",
                     mouse_callbacks={
-                        'Button1': lambda: qtile.cmd_spawn("alacritty -e htop")
+                        'Button1': lambda: qtile.spawn("alacritty -e htop")
                     },
                     decorations=generate_default_rect_decorations("orange")
                 ),
@@ -264,6 +264,20 @@ screens = [
                     length=DEFAULT_SPACER_LENGTH
                 ),
                 widget.TextBox(
+                    text=" ",
+                    # padding=0,
+                    decorations=generate_default_rect_decorations("yellow")
+                ),
+                widget.Backlight(
+                    change_command="brightnessctl set {0}%",
+                    backlight_name="intel_backlight",
+                    fontsize=DEFAULT_TEXT_FONT_SIZE,
+                    decorations=generate_default_rect_decorations("yellow")
+                ),
+                widget.Spacer(
+                    length=DEFAULT_SPACER_LENGTH
+                ),
+                widget.TextBox(
                     text="󰕾",
                     decorations=generate_default_rect_decorations("red")
                 ),
@@ -278,9 +292,8 @@ screens = [
                     text="󰤨 ",
                     decorations=generate_default_rect_decorations("purple"),
                     mouse_callbacks={
-                        'Button1': lambda: qtile.cmd_spawn("rofi-wifi-menu")
+                        'Button1': lambda: qtile.spawn("rofi-wifi-menu")
                     }
-                    # fontsize=19,
                 ),
                 widget.GenPollCommand(
                     decorations=generate_default_rect_decorations("purple"),
@@ -289,7 +302,7 @@ screens = [
                     update_interval=10,
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                     mouse_callbacks={
-                        'Button1': lambda: qtile.cmd_spawn("rofi-wifi-menu")
+                        'Button1': lambda: qtile.spawn("rofi-wifi-menu")
                     }
                 ),
                 widget.Spacer(
@@ -301,15 +314,15 @@ screens = [
                 ),
                 widget.CheckUpdates(
                     distro="Fedora",
-                    display_format="\ueb9a {updates} available",
-                    no_update_string="\ueaa2 0",
+                    display_format="\ueb9a {updates} updates",
+                    no_update_string="\ueaa2 0 updates",
                     colour_have_updates=CATPPUCCIN["red"],
                     colour_no_updates=CATPPUCCIN["green"],
                     update_interval=60,
                     padding=8,
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                     mouse_callbacks={
-                        'Button1': lambda: qtile.cmd_spawn("alacritty -e sudo dnf update")
+                        'Button1': lambda: qtile.spawn("alacritty -e sudo dnf update")
                     }
                 ),
                 widget.Sep(
@@ -332,7 +345,7 @@ screens = [
                     fontsize=DEFAULT_TEXT_FONT_SIZE,
                     format="%I:%M %p ",
                     mouse_callbacks={
-                        'Button1': lambda: qtile.cmd_spawn("gnome-calendar")
+                        'Button1': lambda: qtile.spawn("gnome-calendar")
                     }
                 ),
                 widget.Sep(
@@ -348,6 +361,9 @@ screens = [
                 # # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # # widget.StatusNotifier(),
                 widget.Systray(),
+                widget.Spacer(
+                    length=DEFAULT_SPACER_LENGTH
+                ),
             ],
             size=40,
             # border_width=[0, 2, 0, 2],  # Top right bottom left
